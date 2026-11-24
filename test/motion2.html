@@ -1,0 +1,20 @@
+<!doctype html><html><body><script type="module">
+import { detectMotion } from '/src/input.js';
+const loc = (raw, facing) => raw.substr(-1); // placeholder
+const mk = (dirs) => dirs.map(d => ({ dir: d }));
+const R = {};
+// facing -1 means raw dirs mirror: raw 4 -> local 6, raw 1 -> local 3
+const mirror = (d) => ({1:3,2:2,3:1,4:6,6:4,7:9,8:8,9:7}[d] || d);
+// player facing 1, DP motion 6,2,3 then neutral
+R.dp_local_623_5 = detectMotion(mk([5,5,6,2,3,5]), 1, 'dp');
+R.dp_local_632_5 = detectMotion(mk([5,5,6,3,2,5]), 1, 'dp');
+R.dp_local_6236   = detectMotion(mk([5,5,6,2,3,6]), 1, 'dp');
+R.dp_local_62362  = detectMotion(mk([5,5,6,2,3,6,2]), 1, 'dp');
+R.dp_shouldFail_qcf = detectMotion(mk([5,5,2,3,6,5]), 1, 'dp');
+R.qcf_sanity = detectMotion(mk([5,5,2,3,6,5]), 1, 'qcf');
+// what the test actually does for dp (facing -1 => raw = mirrored local)
+const rawDP = [5,5,6,2,3].map(mirror);
+R.rawDP = rawDP;
+R.dp_mirrored = detectMotion(mk(rawDP.map(mirror)), -1, 'dp');
+window.__r = R;
+</script></body></html>

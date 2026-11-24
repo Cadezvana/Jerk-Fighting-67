@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>JERK FIGHTING 67 — World Warrior Circuit</title>
+<link rel="preconnect" href="" />
+<link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+<div id="app">
+  <canvas id="viewport"></canvas>
+
+  <!-- ============ IN-GAME HUD ============ -->
+  <div id="hud" class="hidden">
+    <div class="hud-top">
+      <div class="hud-side hud-p1">
+        <div class="name-row">
+          <span class="p-tag">P1</span>
+          <span class="fighter-name" id="p1-name">RIVET</span>
+          <span class="round-pips" id="p1-pips"></span>
+        </div>
+        <div class="health-outer">
+          <div class="health-trail" id="p1-health-trail"></div>
+          <div class="health-fill" id="p1-health"></div>
+          <div class="health-gloss"></div>
+        </div>
+        <div class="super-outer" id="p1-superwrap">
+          <div class="super-fill" id="p1-super"></div>
+          <div class="super-levels" id="p1-superlv"></div>
+        </div>
+        <div class="drive-outer"><div class="drive-fill" id="p1-drive"></div><div class="drive-marks"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="combo-counter" id="p1-combo"></div>
+        <div class="gauge-label">DRIVE</div>
+      </div>
+
+      <div class="hud-center">
+        <div class="timer" id="timer">99</div>
+        <div class="round-label" id="round-label">ROUND 1</div>
+      </div>
+
+      <div class="hud-side hud-p2">
+        <div class="name-row">
+          <span class="round-pips" id="p2-pips"></span>
+          <span class="fighter-name" id="p2-name">BRUISER</span>
+          <span class="p-tag">P2</span>
+        </div>
+        <div class="health-outer">
+          <div class="health-trail" id="p2-health-trail"></div>
+          <div class="health-fill" id="p2-health"></div>
+          <div class="health-gloss"></div>
+        </div>
+        <div class="super-outer" id="p2-superwrap">
+          <div class="super-fill" id="p2-super"></div>
+          <div class="super-levels" id="p2-superlv"></div>
+        </div>
+        <div class="drive-outer"><div class="drive-fill" id="p2-drive"></div><div class="drive-marks"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="combo-counter" id="p2-combo"></div>
+        <div class="gauge-label">DRIVE</div>
+      </div>
+    </div>
+
+    <div class="announce" id="announce"></div>
+    <div class="subannounce" id="subannounce"></div>
+
+    <div class="hint-strip" id="hint-strip"></div>
+
+    <!-- Training panel -->
+    <div id="training-panel" class="hidden">
+      <div class="tp-head"><span>TRAINING</span><b id="tp-mode">FREE</b></div>
+      <div class="tp-row"><label>DUMMY:</label><span id="tp-dummy">STAND</span></div>
+      <div class="tp-row"><label>DAMAGE:</label><span id="tp-damage">0</span></div>
+      <div class="tp-row"><label>COMBO:</label><span id="tp-combo">0 HITS</span></div>
+      <div class="tp-row"><label>SCALING:</label><span id="tp-scaling">100%</span></div>
+      <div class="tp-sep"></div>
+      <div class="tp-frames" id="tp-frames"></div>
+      <div class="tp-sep"></div>
+      <div class="tp-inputs" id="tp-inputs"></div>
+      <div class="tp-help">
+        <div>F1 DISPLAY · F2 POSITIONS · F3 REC/PLAY · F4 DUMMY · F5 RESET · F6 HEALTH</div>
+      </div>
+    </div>
+
+    <div id="training-banner" class="hidden"></div>
+  </div>
+
+  <!-- ============ TITLE SCREEN ============ -->
+  <section id="screen-title" class="screen title-screen">
+    <div class="title-bg"></div>
+    <div class="title-logo">
+      <div class="logo-line1">JERK</div>
+      <div class="logo-line2">FIGHTING</div>
+      <div class="logo-67">67</div>
+      <div class="logo-sub">WORLD WARRIOR CIRCUIT</div>
+    </div>
+    <div class="title-menu">
+      <button class="menu-btn primary" data-action="arcade">ARCADE <small>Fight the circuit</small></button>
+      <button class="menu-btn" data-action="versus">VERSUS <small>1P vs CPU</small></button>
+      <button class="menu-btn" data-action="local">LOCAL <small>2 players</small></button>
+      <button class="menu-btn" data-action="training">TRAINING <small>Lab it out</small></button>
+      <button class="menu-btn" data-action="survival">SURVIVAL <small>Endless gauntlet</small></button>
+      <button class="menu-btn" data-action="options">OPTIONS <small>Controls &amp; audio</small></button>
+      <button class="menu-btn ghost" data-action="movelist">MOVE LIST</button>
+    </div>
+    <div class="title-foot">
+      <span>PRESS <b>ENTER</b> TO START</span>
+      <span class="blink">● INSERT COIN</span>
+      <span>v1.0</span>
+    </div>
+    <div class="scanlines"></div>
+  </section>
+
+  <!-- ============ CHARACTER SELECT ============ -->
+  <section id="screen-select" class="screen hidden">
+    <div class="sel-head">
+      <div class="sel-mode" id="sel-mode-label">ARCADE</div>
+      <div class="sel-title">CHARACTER SELECT</div>
+      <div class="sel-instructions" id="sel-instructions">P1: ARROWS / WASD · <b>ENTER</b> or <b>ATTACK</b> to confirm · <b>ESC</b> back</div>
+    </div>
+    <div class="sel-body">
+      <div class="sel-side sel-p1">
+        <div class="portrait-wrap" id="portrait-p1"><canvas id="portrait-canvas-p1" width="320" height="400"></canvas></div>
+        <div class="sel-name" id="sel-name-p1">—</div>
+        <div class="sel-style" id="sel-style-p1"></div>
+        <div class="stat-list" id="stats-p1"></div>
+      </div>
+      <div class="sel-grid" id="sel-grid"></div>
+      <div class="sel-side sel-p2">
+        <div class="portrait-wrap" id="portrait-p2"><canvas id="portrait-canvas-p2" width="320" height="400"></canvas></div>
+        <div class="sel-name" id="sel-name-p2">—</div>
+        <div class="sel-style" id="sel-style-p2"></div>
+        <div class="stat-list" id="stats-p2"></div>
+      </div>
+    </div>
+    <div class="sel-foot">
+      <div class="sel-desc" id="sel-desc"></div>
+      <div class="sel-controls" id="sel-controls"></div>
+    </div>
+    <div class="scanlines"></div>
+  </section>
+
+  <!-- ============ MODE / STAGE / CPU SETUP ============ -->
+  <section id="screen-setup" class="screen hidden">
+    <div class="panel">
+      <div class="panel-title" id="setup-title">SETUP</div>
+      <div class="setup-rows" id="setup-rows"></div>
+      <div class="setup-buttons">
+        <button class="menu-btn primary" id="setup-start">FIGHT</button>
+        <button class="menu-btn ghost" id="setup-back">BACK</button>
+      </div>
+      <div class="tiny-note">ENTER to start · ESC to go back</div>
+    </div>
+    <div class="scanlines"></div>
+  </section>
+
+  <!-- ============ OPTIONS ============ -->
+  <section id="screen-options" class="screen hidden">
+    <div class="panel wide">
+      <div class="panel-title">OPTIONS</div>
+      <div class="options-grid" id="options-grid"></div>
+      <div class="setup-buttons">
+        <button class="menu-btn primary" id="options-back">BACK</button>
+        <button class="menu-btn ghost" id="options-default">DEFAULTS</button>
+      </div>
+      <div class="tiny-note">Esc / Enter to return · P1 config uses keyboard P1 column, P2 config uses P2 column</div>
+    </div>
+    <div class="scanlines"></div>
+  </section>
+
+  <!-- ============ MOVE LIST ============ -->
+  <section id="screen-moves" class="screen hidden">
+    <div class="moves-wrap">
+      <div class="moves-head">
+        <div class="panel-title">MOVE LIST</div>
+        <div class="moves-tabs" id="moves-tabs"></div>
+      </div>
+      <div class="moves-body" id="moves-body"></div>
+      <div class="setup-buttons"><button class="menu-btn primary" id="moves-back">BACK</button></div>
+    </div>
+    <div class="scanlines"></div>
+  </section>
+
+  <!-- ============ PAUSE ============ -->
+  <div id="pause" class="overlay hidden">
+    <div class="pause-box">
+      <div class="panel-title">PAUSED</div>
+      <button class="menu-btn primary" id="pause-resume">RESUME</button>
+      <button class="menu-btn" id="pause-controls">CONTROLS</button>
+      <button class="menu-btn" id="pause-moves">MOVE LIST</button>
+      <button class="menu-btn" id="pause-restart">RESTART</button>
+      <button class="menu-btn ghost" id="pause-quit">QUIT TO TITLE</button>
+    </div>
+  </div>
+
+  <!-- ============ PAUSE CONTROLS ============ -->
+  <div id="controls-overlay" class="overlay hidden">
+    <div class="panel wide">
+      <div class="panel-title">CONTROLS</div>
+      <div id="controls-body" class="controls-body"></div>
+      <div class="setup-buttons"><button class="menu-btn primary" id="controls-close">BACK</button></div>
+    </div>
+  </div>
+
+  <!-- ============ RESULTS / GAME OVER ============ -->
+  <div id="results" class="overlay hidden">
+    <div class="results-box">
+      <div class="results-head" id="results-head">K.O.</div>
+      <div class="results-sub" id="results-sub"></div>
+      <div class="results-stats" id="results-stats"></div>
+      <div class="setup-buttons">
+        <button class="menu-btn primary" id="results-continue">CONTINUE</button>
+        <button class="menu-btn ghost" id="results-quit">TITLE</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="combo-trial" class="overlay hidden">
+    <div class="trial-box">
+      <div class="panel-title">COMBO TRIAL</div>
+      <div class="trial-list" id="trial-list"></div>
+      <div class="setup-buttons"><button class="menu-btn" id="trial-close">CLOSE</button></div>
+    </div>
+  </div>
+
+  <div id="loading" class="screen">
+    <div class="loading-inner">
+      <div class="load-logo">JERK FIGHTING <span>67</span></div>
+      <div class="load-bar"><div id="load-fill"></div></div>
+      <div class="load-msg" id="load-msg">Warming up the arena…</div>
+    </div>
+  </div>
+
+  <div id="fps" class="fps"></div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

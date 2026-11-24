@@ -1,0 +1,32 @@
+{
+  "name": "jerk-fighting-67",
+  "version": "1.0.0",
+  "description": "JERK FIGHTING 67 - a 3D fighting game",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cadezvana/Jerk-Fighting-67.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cadezvana/Jerk-Fighting-67/issues"
+  },
+  "homepage": "https://github.com/Cadezvana/Jerk-Fighting-67#readme",
+  "type": "module",
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "^158.0.0",
+    "playwright": "^1.49.0",
+    "puppeteer-core": "^23.11.1",
+    "vite": "^5.4.11"
+  }
+}

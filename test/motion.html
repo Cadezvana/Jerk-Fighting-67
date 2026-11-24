@@ -1,0 +1,18 @@
+<!doctype html><html><body><script type="module">
+import { detectMotion } from '/src/input.js';
+const mk = (dirs) => dirs.map(d => ({ dir: d }));
+const res = {};
+res.qcf_236 = detectMotion(mk([2,3,6]), 1, 'qcf');
+res.qcf_236_last_is5 = detectMotion(mk([2,3,6,5]), 1, 'qcf');
+res.qcf_26 = detectMotion(mk([2,6]), 1, 'qcf');
+res.qcf_1236 = detectMotion(mk([1,2,3,6]), 1, 'qcf');
+res.qcf_236_facingNeg = detectMotion(mk([2,3,4]), -1, 'qcf');
+res.qcf_shouldFail = detectMotion(mk([6,3,2]), 1, 'qcf');
+res.dp_623 = detectMotion(mk([6,2,3]), 1, 'dp');
+res.dp_632 = detectMotion(mk([6,3,2]), 1, 'dp');
+res.hcf_41236 = detectMotion(mk([4,1,2,3,6]), 1, 'hcf');
+res.hcb_63214 = detectMotion(mk([6,3,2,1,4]), 1, 'hcb');
+res.qcb_214 = detectMotion(mk([2,1,4]), 1, 'qcb');
+res.full_hist = detectMotion([{dir:5},{dir:5},{dir:2},{dir:3},{dir:6},{dir:6}], 1, 'qcf');
+window.__r = res;
+</script></body></html>
