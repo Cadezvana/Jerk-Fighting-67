@@ -6,3 +6,6 @@ dist/
 
 # test captures (regenerate with node test/shots2.cjs)
 test/shots/
+
+# production-build smoke check output
+prodcheck.log
